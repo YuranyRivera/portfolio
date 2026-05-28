@@ -1,0 +1,190 @@
+/* Hero.module.css */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6rem 2rem 4rem;
+}
+
+/* Glow de fondo */
+.glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(700px, 90vw);
+  height: min(700px, 90vw);
+  background: radial-gradient(ellipse, rgba(109, 40, 217, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-6);
+  max-width: 680px;
+}
+
+/* Badge "Disponible" */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--clr-purple-300);
+  border: 1px solid var(--clr-border);
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  background: rgba(109, 40, 217, 0.08);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--clr-purple-500);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* Título principal */
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.name {
+  display: block;
+  color: var(--clr-purple-400);
+}
+
+/* Rol */
+.role {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--clr-text-secondary);
+  letter-spacing: 0.06em;
+}
+
+/* Tagline */
+.tagline {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  font-weight: 300;
+  color: var(--clr-text-secondary);
+  max-width: 480px;
+  line-height: 1.65;
+}
+
+/* Botones */
+.actions {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btnPrimary {
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 2rem;
+  background: var(--clr-purple-600);
+  color: var(--clr-white);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-base), transform var(--transition-base);
+}
+
+.btnPrimary:hover {
+  background: var(--clr-purple-500);
+  transform: translateY(-2px);
+}
+
+.btnPrimary:active { transform: translateY(0); }
+
+.btnSecondary {
+  font-size: 0.88rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: var(--clr-text-primary);
+  border: 1px solid var(--clr-border-mid);
+  border-radius: var(--radius-full);
+  transition: border-color var(--transition-base), color var(--transition-base), transform var(--transition-base);
+}
+
+.btnSecondary:hover {
+  border-color: var(--clr-purple-500);
+  color: var(--clr-purple-300);
+  transform: translateY(-2px);
+}
+
+/* Redes sociales */
+.socials {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.socialLink {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--clr-text-muted);
+  transition: color var(--transition-base);
+}
+
+.socialLink:hover { color: var(--clr-purple-400); }
+
+.socialDivider {
+  color: var(--clr-text-muted);
+  font-size: 0.75rem;
+}
+
+/* Scroll indicator */
+.scrollIndicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.scrollLine {
+  display: block;
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--clr-purple-500), transparent);
+  margin: 0 auto;
+  animation: scrollDown 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+  0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+}
+
+@media (max-width: 480px) {
+  .title { font-size: 2rem; }
+  .actions { flex-direction: column; align-items: center; }
+  .btnPrimary, .btnSecondary { width: 100%; max-width: 280px; text-align: center; }
+}
