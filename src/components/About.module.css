@@ -77,6 +77,24 @@
   border-color: var(--clr-purple-400);
 }
 
+/* Avatar circular en la columna bio */
+.avatarWrapper {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--clr-purple-500);
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
 /* Facts */
 .facts {
   display: grid;

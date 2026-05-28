@@ -7,29 +7,30 @@
 export const PERSONAL_INFO = {
   name: 'Yurany Sofia Rivera De La Cruz',
   shortName: 'Sofia Rivera',
-  role: 'Frontend Developer',
+  role: 'Desarrolladora de Software · Frontend',
   tagline: 'Construyo interfaces que las personas disfrutan usar.',
-  bio: `Soy una desarrolladora Frontend apasionada por crear experiencias digitales
-  limpias, accesibles y con atención al detalle. Me especializo en React y TypeScript,
-  y disfruto encontrar el punto exacto donde el diseño y el código se fusionan.`,
+  bio: `Desarrolladora de Software apasionada por construir interfaces que combinan funcionalidad
+  y buen diseño. Me especializo en React y Next.js, y disfruto cada desafío que me acerca
+  más a ser mejor en lo que hago.`,
   location: 'Colombia',
   email: 'yuranidelacruz2006@gmail.com',
   github: 'https://github.com/YuranyRivera',
-  linkedin: 'https://linkedin.com/in/yurany',
+  linkedin: 'https://www.linkedin.com/in/sofia-de-la-cruz-5828ba311',
+  avatar: '/sofia.png',
 }
 
 export const SKILLS = [
   {
     category: 'Frontend',
-    items: ['React', 'TypeScript', 'JavaScript (ES2023)', 'HTML5 & CSS3', 'Tailwind CSS'],
+    items: ['React', 'Next.js', 'TypeScript', 'JavaScript (ES2023)', 'HTML5 & CSS3', 'Tailwind CSS'],
   },
   {
-    category: 'Herramientas',
-    items: ['Git & GitHub', 'Vite', 'Figma', 'VS Code', 'Node.js'],
+    category: 'Backend & BD',
+    items: ['Node.js', 'MySQL', 'PostgreSQL', 'Supabase', 'REST APIs'],
   },
   {
-    category: 'Prácticas',
-    items: ['Responsive Design', 'Accesibilidad (a11y)', 'Clean Code', 'Component-Driven', 'REST APIs'],
+    category: 'Herramientas & Prácticas',
+    items: ['Git & GitHub', 'Figma', 'Scrum / Kanban', 'Responsive Design', 'Accesibilidad (a11y)'],
   },
 ]
 
@@ -43,7 +44,7 @@ export const PROJECTS = [
     id: 1,
     title: 'InveSchool',
     description: 'Sistema de inventario para instituciones educativas. Permite gestionar artículos de almacenamiento y administrativos, registrar movimientos de entrada y salida, dar de baja activos con evidencia fotográfica y generar reportes en PDF y Excel.',
-    tags: ['React', 'Node.js', 'PostgreSQL', 'Supabase', 'Cloudinary'],
+    tags: ['React', 'Node.js', 'PostgreSQL', 'Supabase'],
     liveUrl: 'https://inveschool.netlify.app',
     repoUrl: 'https://github.com/YuranyRivera/InveSchool',
     featured: true,

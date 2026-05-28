@@ -39,11 +39,19 @@ export default function About() {
             animate={isVisible ? 'visible' : 'hidden'}
             transition={{ delay: 0.15 }}
           >
+            <div className={styles.avatarWrapper}>
+              <img
+                src={PERSONAL_INFO.avatar}
+                alt={`Foto de ${PERSONAL_INFO.shortName}`}
+                className={styles.avatar}
+              />
+            </div>
+
             <p>{PERSONAL_INFO.bio}</p>
             <p className={styles.bioParagraph}>
-              Me entusiasma cada detalle: desde la arquitectura de un componente hasta
-              la micro-interacción que hace sonreír al usuario. Siempre aprendiendo,
-              siempre construyendo.
+              Tengo experiencia trabajando en equipo en proyectos reales, integrando APIs,
+              construyendo componentes reutilizables y resolviendo problemas bajo metodologías
+              ágiles. En constante aprendizaje y siempre lista para aportar.
             </p>
 
             <a
@@ -79,6 +87,6 @@ export default function About() {
 const FACTS = [
   { value: '📍', label: 'Colombia' },
   { value: 'React', label: 'Stack principal' },
-  { value: 'a11y', label: 'Accesibilidad' },
+  { value: 'Next.js', label: 'Frontend' },
   { value: 'Open', label: 'A colaboraciones' },
 ]
