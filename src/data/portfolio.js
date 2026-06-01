@@ -54,8 +54,8 @@ export const PROJECTS = [
     title: 'Banco de Proyectos PAC',
     description: 'Plataforma de gestión de proyectos para aprendices del SENA. Permite crear proyectos, evaluarlos por objetivos y alcances, asignar aprendices y calcular promedios finales con diferentes roles de usuario.',
     tags: ['React', 'Node.js', 'PostgreSQL', 'TailwindCSS', 'JWT'],
-    liveUrl: null,
-    repoUrl: 'https://github.com/InstruSenaDev/Banco-de-Proyectos---Pac',
+    liveUrl: 'https://banco-de-proyectos.netlify.app',
+    repoUrl: 'https://github.com/YuranyRivera/Banco-de-Proyectos-PAC',
     featured: true,
   },
 ]
