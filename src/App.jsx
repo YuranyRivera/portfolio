@@ -12,6 +12,7 @@ import ParticleBackground from '@/components/ParticleBackground'
 // Carga diferida de secciones que no son visibles al inicio
 const About    = lazy(() => import('@/components/About'))
 const Skills   = lazy(() => import('@/components/Skills'))
+const Journey  = lazy(() => import('@/components/Journey'))
 const Showcase = lazy(() => import('@/components/Showcase'))
 const Projects = lazy(() => import('@/components/Projects'))
 const Contact  = lazy(() => import('@/components/Contact'))
@@ -58,6 +59,10 @@ export default function App() {
 
         <Suspense fallback={<SectionFallback />}>
           <About />
+        </Suspense>
+
+        <Suspense fallback={<SectionFallback />}>
+          <Journey />
         </Suspense>
 
         <Suspense fallback={<SectionFallback />}>

@@ -3,17 +3,9 @@
  * Habilidades: carrusel infinito de herramientas con sus logos + ficha por categoría.
  */
 import { motion } from 'framer-motion'
-import {
-  SiReact, SiNextdotjs, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiTailwindcss,
-  SiNodedotjs, SiPostgresql, SiMysql, SiSupabase, SiGit, SiGithub, SiFigma, SiVite,
-} from 'react-icons/si'
 import { SKILLS, TOOLS } from '@/data/portfolio'
+import { ICONS } from '@/utils/techIcons'
 import styles from './Skills.module.css'
-
-const ICONS = {
-  SiReact, SiNextdotjs, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiTailwindcss,
-  SiNodedotjs, SiPostgresql, SiMysql, SiSupabase, SiGit, SiGithub, SiFigma, SiVite,
-}
 
 const reveal = {
   hidden:  { opacity: 0, y: 32 },
