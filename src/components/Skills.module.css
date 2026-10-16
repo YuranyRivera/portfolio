@@ -2,7 +2,7 @@
 
 .section {
   position: relative;
-  padding: clamp(6rem, 12vw, 9rem) 0;
+  padding: clamp(4rem, 8vw, 6rem) 0;
   background: rgba(18, 11, 28, 0.55);
   overflow: hidden;
 }

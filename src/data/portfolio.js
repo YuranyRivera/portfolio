@@ -62,8 +62,11 @@ export const TOOLS = [
 /**
  * Proyectos — agrega los tuyos aquí.
  * Campos obligatorios: id, title, description, tags
- * Opcionales: liveUrl, repoUrl, featured, category,
+ * Opcionales: liveUrl, repoUrl, featured (aparece primero), category,
  *             images: [{ src, alt }] capturas en /public para el carrusel
+ *
+ * La sección muestra una cuadrícula con "Ver más", así que escala bien
+ * aunque haya muchos proyectos. Las capturas también alimentan la galería (Showcase).
  */
 export const PROJECTS = [
   {
@@ -78,7 +81,7 @@ export const PROJECTS = [
       { src: '/projects/inveschool-5.jpg', alt: 'Gestión de usuarios y roles' },
       { src: '/projects/inveschool-1.jpg', alt: 'Pantalla de inicio de sesión' },
     ],
-    tags: ['React', 'Node.js', 'PostgreSQL', 'Supabase'],
+    tags: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 'JWT'],
     liveUrl: 'https://frontend-phi-five-52.vercel.app/articles',
     repoUrl: 'https://github.com/YuranyRivera/InveSchool',
     featured: true,
@@ -89,11 +92,11 @@ export const PROJECTS = [
     description: 'Plataforma de gestión de proyectos para aprendices del SENA. Permite crear proyectos, evaluarlos por objetivos y alcances, asignar aprendices y calcular promedios finales con diferentes roles de usuario.',
     category: 'Full-stack · Plataforma educativa',
     images: [
-      { src: '/projects/banco-pac-1.jpg', alt: 'Página de inicio del Banco de Proyectos' },
+      { src: '/projects/banco-pac-1.jpg', alt: 'Página de inicio' },
       { src: '/projects/banco-pac-2.jpg', alt: 'Inicio de sesión' },
       { src: '/projects/banco-pac-3.jpg', alt: 'Registro de usuarios' },
     ],
-    tags: ['React', 'Node.js', 'PostgreSQL', 'TailwindCSS', 'JWT'],
+    tags: ['React', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'JWT'],
     liveUrl: 'https://banco-de-proyectos.netlify.app',
     repoUrl: 'https://github.com/YuranyRivera/Banco-de-Proyectos-PAC',
     featured: true,

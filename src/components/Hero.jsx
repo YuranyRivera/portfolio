@@ -1,7 +1,7 @@
 /**
  * components/Hero.jsx
  * Hero a pantalla completa estilo Tesla.
- * Fondo: video (si PERSONAL_INFO.heroVideo existe) u orbes de luz morada animados.
+ * Fondo: video (si PERSONAL_INFO.heroVideo existe) o una cuadrícula fina sobre el fondo de partículas.
  * El contenido hace parallax y se desvanece al hacer scroll.
  */
 import { useRef } from 'react'
@@ -36,15 +36,8 @@ function HeroBackground() {
     )
   }
 
-  /* Orbes de luz morada que flotan lentamente */
-  return (
-    <>
-      <div className={`${styles.orb} ${styles.orb1}`} />
-      <div className={`${styles.orb} ${styles.orb2}`} />
-      <div className={`${styles.orb} ${styles.orb3}`} />
-      <div className={styles.grid} />
-    </>
-  )
+  /* Cuadrícula fina; el movimiento lo aporta el fondo de partículas global */
+  return <div className={styles.grid} />
 }
 
 export default function Hero() {
@@ -61,7 +54,6 @@ export default function Hero() {
       <motion.div className={styles.background} style={{ scale: bgScale }} aria-hidden="true">
         <HeroBackground />
         <div className={styles.overlay} />
-        <div className={styles.grain} />
       </motion.div>
 
       <motion.div className={styles.content} style={{ y: contentY, opacity: contentOpacity }}>

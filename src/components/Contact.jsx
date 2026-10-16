@@ -18,7 +18,6 @@ const reveal = {
 export default function Contact() {
   return (
     <section id="contact" className={styles.section} aria-labelledby="contact-heading">
-      <div className={styles.glow} aria-hidden="true" />
 
       <div className={styles.inner}>
         <motion.span className="eyebrow" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>

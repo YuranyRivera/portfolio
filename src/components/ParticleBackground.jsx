@@ -1,25 +1,27 @@
 /**
  * components/ParticleBackground.jsx
- * Fondo nebulosa fucsia — Canvas puro, sin dependencias externas.
- * Partículas fucsia y moradas flotantes con líneas de conexión y glow central animado.
+ * Fondo de constelación nítido — Canvas puro, sin dependencias externas.
+ * Puntos fucsia/lila que flotan y se conectan con líneas finas; el cursor
+ * atrae conexiones y aparta ligeramente las partículas cercanas.
  *
  * Buenas prácticas aplicadas:
- *  - useRef para el canvas (sin re-renders)
- *  - useEffect con cleanup para cancelar el animationFrame al desmontar
- *  - ResizeObserver para ajustar el canvas al tamaño real del contenedor
- *  - memo para evitar re-renders innecesarios desde el padre
+ *  - Se limpia el canvas en cada frame (sin estelas ni desenfoque)
+ *  - Cantidad de partículas proporcional al área, con tope
+ *  - Pausa cuando la pestaña está oculta; dibujo estático con reduced-motion
+ *  - Cleanup de listeners y animationFrame al desmontar
  */
 import { useEffect, useRef, memo } from 'react'
 
 /* ── Configuración centralizada ─────────────────────────────────────── */
 const CONFIG = {
-  particleCount:    130,
-  maxLinkDistance:  110,
-  speed:            0.35,
-  colors:           ['#d946ef', '#e879f9', '#c026d3', '#a855f7', '#f0abfc', '#ffffff'],
-  linkOpacity:      0.18,
-  glowOpacity:      0.13,
-  bgFade:           'rgba(8, 3, 14, 0.24)',   // cuánto se borra el rastro por frame
+  density:         1 / 11000,   // partículas por px²
+  maxParticles:    140,
+  maxLinkDistance: 130,
+  mouseRadius:     170,
+  speed:           0.28,
+  colors:          ['#e879f9', '#d946ef', '#c084fc', '#f5d0fe', '#ffffff'],
+  linkColor:       '217, 70, 239',
+  linkOpacity:     0.22,
 }
 
 /* ── Fábrica de partícula ────────────────────────────────────────────── */
@@ -27,10 +29,10 @@ function createParticle(W, H) {
   return {
     x:     Math.random() * W,
     y:     Math.random() * H,
-    r:     Math.random() * 1.9 + 0.4,
+    r:     Math.random() * 1.4 + 0.6,
     vx:    (Math.random() - 0.5) * CONFIG.speed,
     vy:    (Math.random() - 0.5) * CONFIG.speed,
-    alpha: Math.random() * 0.65 + 0.15,
+    alpha: Math.random() * 0.5 + 0.5,
     phase: Math.random() * Math.PI * 2,
     color: CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)],
   }
@@ -44,115 +46,122 @@ function ParticleBackground() {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx    = canvas.getContext('2d')
-    let rafId    = null
-    let tick     = 0
+    const ctx = canvas.getContext('2d')
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const mouse = { x: -9999, y: -9999 }
+    let rafId = null
     let particles = []
+    let W = 0
+    let H = 0
 
-    /* Inicializa / re-inicializa partículas al tamaño actual */
-    function init() {
-      const W = canvas.width
-      const H = canvas.height
-      particles = Array.from({ length: CONFIG.particleCount }, () => createParticle(W, H))
-    }
-
-    /* Ajusta el canvas al tamaño real del contenedor */
+    /* Ajusta el canvas a la ventana y regenera partículas */
     function setSize() {
-      const { width, height } = canvas.getBoundingClientRect()
-      canvas.width  = width  * window.devicePixelRatio
-      canvas.height = height * window.devicePixelRatio
-      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0)
-      init()
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      W = window.innerWidth
+      H = window.innerHeight
+      canvas.width = W * dpr
+      canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      const count = Math.min(CONFIG.maxParticles, Math.round(W * H * CONFIG.density))
+      particles = Array.from({ length: count }, () => createParticle(W, H))
     }
 
-    /* Loop de animación */
+    function step() {
+      for (const p of particles) {
+        /* Repulsión suave del cursor */
+        const dx = p.x - mouse.x
+        const dy = p.y - mouse.y
+        const d2 = dx * dx + dy * dy
+        if (d2 < 90 * 90 && d2 > 0.01) {
+          const d = Math.sqrt(d2)
+          p.x += (dx / d) * 0.6
+          p.y += (dy / d) * 0.6
+        }
+
+        p.x += p.vx
+        p.y += p.vy
+        p.phase += 0.02
+        if (p.x < 0 || p.x > W) p.vx *= -1
+        if (p.y < 0 || p.y > H) p.vy *= -1
+      }
+    }
+
     function draw() {
-      const W = canvas.width  / window.devicePixelRatio
-      const H = canvas.height / window.devicePixelRatio
+      ctx.clearRect(0, 0, W, H)
+      ctx.lineWidth = 0.7
 
-      /* Fade del fondo — crea el efecto de estela */
-      ctx.fillStyle = CONFIG.bgFade
-      ctx.fillRect(0, 0, W, H)
-
-      /* Glow central animado (nebulosa) */
-      const cx = W * 0.5 + Math.sin(tick * 0.008) * W * 0.12
-      const cy = H * 0.5 + Math.cos(tick * 0.006) * H * 0.09
-      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 0.65)
-      glow.addColorStop(0, `rgba(192, 38, 211, ${CONFIG.glowOpacity})`)
-      glow.addColorStop(0.5, `rgba(126, 34, 206, ${CONFIG.glowOpacity * 0.5})`)
-      glow.addColorStop(1, 'transparent')
-      ctx.fillStyle = glow
-      ctx.fillRect(0, 0, W, H)
-
-      /* Segundo glow desplazado — más profundidad */
-      const cx2 = W * 0.3 + Math.sin(tick * 0.005 + 2) * W * 0.08
-      const cy2 = H * 0.6 + Math.cos(tick * 0.007 + 1) * H * 0.07
-      const glow2 = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, H * 0.4)
-      glow2.addColorStop(0, `rgba(168, 85, 247, ${CONFIG.glowOpacity * 0.7})`)
-      glow2.addColorStop(1, 'transparent')
-      ctx.fillStyle = glow2
-      ctx.fillRect(0, 0, W, H)
-
-      /* Partículas + conexiones */
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
 
-        /* Movimiento */
-        p.x     += p.vx
-        p.y     += p.vy
-        p.phase += 0.012
-
-        /* Rebote en bordes */
-        if (p.x < 0 || p.x > W) p.vx *= -1
-        if (p.y < 0 || p.y > H) p.vy *= -1
-
-        /* Líneas de conexión */
+        /* Líneas entre partículas cercanas */
         for (let j = i + 1; j < particles.length; j++) {
-          const q  = particles[j]
+          const q = particles[j]
           const dx = p.x - q.x
           const dy = p.y - q.y
-          const d  = Math.sqrt(dx * dx + dy * dy)
-
+          const d = Math.sqrt(dx * dx + dy * dy)
           if (d < CONFIG.maxLinkDistance) {
-            const linkAlpha = (1 - d / CONFIG.maxLinkDistance) * CONFIG.linkOpacity
+            ctx.strokeStyle = `rgba(${CONFIG.linkColor}, ${(1 - d / CONFIG.maxLinkDistance) * CONFIG.linkOpacity})`
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)
             ctx.lineTo(q.x, q.y)
-            ctx.strokeStyle = `rgba(217, 70, 239, ${linkAlpha})`
-            ctx.lineWidth   = 0.6
             ctx.stroke()
           }
         }
 
-        /* Punto de la partícula con pulso de opacidad */
-        const pulseAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.phase))
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r * (0.85 + 0.15 * Math.sin(p.phase)), 0, Math.PI * 2)
-        ctx.fillStyle = p.color
-        ctx.globalAlpha = pulseAlpha
-        ctx.fill()
-        ctx.globalAlpha = 1
+        /* Líneas hacia el cursor */
+        const mx = p.x - mouse.x
+        const my = p.y - mouse.y
+        const md = Math.sqrt(mx * mx + my * my)
+        if (md < CONFIG.mouseRadius) {
+          ctx.strokeStyle = `rgba(245, 208, 254, ${(1 - md / CONFIG.mouseRadius) * 0.45})`
+          ctx.beginPath()
+          ctx.moveTo(p.x, p.y)
+          ctx.lineTo(mouse.x, mouse.y)
+          ctx.stroke()
+        }
       }
 
-      tick++
-      rafId = requestAnimationFrame(draw)
+      /* Puntos con un leve parpadeo */
+      for (const p of particles) {
+        ctx.globalAlpha = p.alpha * (0.75 + 0.25 * Math.sin(p.phase))
+        ctx.fillStyle = p.color
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      ctx.globalAlpha = 1
     }
 
-    /* ResizeObserver — reacciona a cambios de tamaño del contenedor */
-    const observer = new ResizeObserver(() => {
+    function loop() {
+      step()
+      draw()
+      rafId = requestAnimationFrame(loop)
+    }
+
+    function start() {
       cancelAnimationFrame(rafId)
-      setSize()
-      rafId = requestAnimationFrame(draw)
-    })
+      if (reduceMotion) draw()
+      else rafId = requestAnimationFrame(loop)
+    }
 
-    observer.observe(canvas)
+    const onResize = () => { setSize(); start() }
+    const onMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY }
+    const onLeave = () => { mouse.x = -9999; mouse.y = -9999 }
+    const onVisibility = () => (document.hidden ? cancelAnimationFrame(rafId) : start())
+
     setSize()
-    rafId = requestAnimationFrame(draw)
+    start()
+    window.addEventListener('resize', onResize)
+    window.addEventListener('pointermove', onMove, { passive: true })
+    document.addEventListener('pointerleave', onLeave)
+    document.addEventListener('visibilitychange', onVisibility)
 
-    /* Cleanup al desmontar el componente */
     return () => {
       cancelAnimationFrame(rafId)
-      observer.disconnect()
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('pointermove', onMove)
+      document.removeEventListener('pointerleave', onLeave)
+      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [])
 
@@ -162,10 +171,10 @@ function ParticleBackground() {
       aria-hidden="true"
       style={{
         position: 'fixed',
-        inset:    0,
-        width:    '100%',
-        height:   '100%',
-        zIndex:   0,
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 0,
         pointerEvents: 'none',
       }}
     />
