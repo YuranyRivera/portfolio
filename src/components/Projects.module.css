@@ -47,8 +47,11 @@
 .card:hover,
 .card:focus-within {
   transform: translateY(-6px);
-  border-color: rgba(232, 121, 249, 0.45);
-  box-shadow: 0 24px 50px -24px rgba(217, 70, 239, 0.55);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 0 26px rgba(255, 255, 255, 0.3),
+    0 24px 60px -24px rgba(245, 208, 254, 0.5);
 }
 
 .thumb {

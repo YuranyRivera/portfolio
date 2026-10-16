@@ -1,8 +1,9 @@
 /**
  * components/Coverflow.jsx
  * Carrusel 3D de imágenes: la imagen activa al centro y las vecinas más pequeñas
- * detrás, a los lados. Autoplay (se pausa al pasar el mouse), clic en una lateral
- * para traerla al frente, swipe en móvil y clic en la central para verla en grande.
+ * detrás, a los lados. Sin flechas ni puntos: avanza solo (se pausa al pasar el
+ * mouse), clic en una lateral para traerla al frente, swipe en móvil y clic en la
+ * central para verla en grande.
  */
 import { useCallback, useEffect, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
@@ -81,28 +82,6 @@ export default function Coverflow({ images, title }) {
           )
         })}
       </motion.div>
-
-      {total > 1 && (
-        <div className={styles.controls}>
-          <button className={styles.arrow} onClick={() => go(-1)} aria-label="Imagen anterior">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
-          </button>
-          <div className={styles.dots}>
-            {images.map((img, i) => (
-              <button
-                key={img.src}
-                className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
-                onClick={() => setActive(i)}
-                aria-label={`Ir a la imagen ${i + 1}`}
-                aria-current={i === active ? 'true' : undefined}
-              />
-            ))}
-          </div>
-          <button className={styles.arrow} onClick={() => go(1)} aria-label="Imagen siguiente">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-          </button>
-        </div>
-      )}
 
       <p className={styles.caption} aria-live="polite">{images[active].alt}</p>
 

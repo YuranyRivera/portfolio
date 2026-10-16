@@ -27,6 +27,19 @@
     0 30px 60px -20px rgba(0, 0, 0, 0.8),
     0 0 50px -20px rgba(217, 70, 239, 0.45);
   cursor: pointer;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Borde blanco brillante al pasar el cursor */
+.card:hover,
+.card:focus-visible {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 0 28px rgba(255, 255, 255, 0.35),
+    0 0 70px -10px rgba(245, 208, 254, 0.45);
 }
 
 .card img {
@@ -37,44 +50,8 @@
   pointer-events: none;
 }
 
-.controls {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.arrow {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 1px solid var(--clr-border-mid);
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
-}
-.arrow:hover { background: var(--clr-accent-soft); border-color: var(--clr-lilac); }
-
-.dots {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.25);
-  transition: width var(--transition-base), background-color var(--transition-fast);
-}
-.dotActive {
-  width: 24px;
-  background: var(--gradient-accent);
-}
-
 .caption {
-  margin-top: 0.6rem;
+  margin-top: 1rem;
   text-align: center;
   font-size: 0.8rem;
   color: var(--clr-text-muted);

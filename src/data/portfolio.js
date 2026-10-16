@@ -75,11 +75,11 @@ export const PROJECTS = [
     description: 'Sistema de inventario para instituciones educativas. Permite gestionar artículos de almacenamiento y administrativos, registrar movimientos de entrada y salida, dar de baja activos con evidencia fotográfica y generar reportes en PDF y Excel.',
     category: 'Full-stack · Gestión de inventario',
     images: [
+      { src: '/projects/inveschool-1.jpg', alt: 'Pantalla de inicio de sesión' },
       { src: '/projects/inveschool-2.jpg', alt: 'Tablero con resumen del inventario' },
       { src: '/projects/inveschool-3.jpg', alt: 'Listado de artículos con filtros y exportación' },
       { src: '/projects/inveschool-4.jpg', alt: 'Registro de movimientos de entrada y salida' },
       { src: '/projects/inveschool-5.jpg', alt: 'Gestión de usuarios y roles' },
-      { src: '/projects/inveschool-1.jpg', alt: 'Pantalla de inicio de sesión' },
     ],
     tags: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 'JWT'],
     liveUrl: 'https://frontend-phi-five-52.vercel.app/articles',
