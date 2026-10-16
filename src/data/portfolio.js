@@ -45,7 +45,7 @@ export const PROJECTS = [
     title: 'InveSchool',
     description: 'Sistema de inventario para instituciones educativas. Permite gestionar artículos de almacenamiento y administrativos, registrar movimientos de entrada y salida, dar de baja activos con evidencia fotográfica y generar reportes en PDF y Excel.',
     tags: ['React', 'Node.js', 'PostgreSQL', 'Supabase'],
-    liveUrl: 'https://inveschool.netlify.app',
+    liveUrl: 'https://frontend-phi-five-52.vercel.app/articles',
     repoUrl: 'https://github.com/YuranyRivera/InveSchool',
     featured: true,
   },
