@@ -1,29 +1,30 @@
 /* ============================================
    VARIABLES GLOBALES — DESIGN TOKENS
+   Estética inspirada en tesla.com con identidad propia:
+   negro violáceo, morado/lila y blanco; serif elegante para títulos.
    ============================================ */
 :root {
-  
   /* Colors */
-  --clr-bg:         #080810;
-  --clr-bg-surface: #0e0e1a;
-  --clr-bg-card:    #12121f;
-  --clr-purple-100: #ede9fe;
-  --clr-purple-300: #c4b5fd;
-  --clr-purple-400: #a78bfa;
-  --clr-purple-500: #8b5cf6;
-  --clr-purple-600: #7c3aed;
-  --clr-purple-700: #6d28d9;
-  --clr-purple-900: #2e1065;
-  --clr-white:      #ffffff;
-  --clr-text-primary:   rgba(255,255,255,0.92);
-  --clr-text-secondary: rgba(255,255,255,0.50);
-  --clr-text-muted:     rgba(255,255,255,0.28);
-  --clr-border:     rgba(167,139,250,0.14);
-  --clr-border-mid: rgba(167,139,250,0.28);
+  --clr-bg:          #0b0710;
+  --clr-bg-surface:  #120b1c;
+  --clr-bg-card:     #1a1126;
+  --clr-bg-light:    #faf5ff;
+  --clr-white:       #ffffff;
+  --clr-accent:      #a855f7;   /* morado */
+  --clr-accent-2:    #e879f9;   /* orquídea */
+  --clr-lilac:       #d8b4fe;
+  --gradient-accent: linear-gradient(120deg, #f5d0fe 0%, #d8b4fe 35%, #a855f7 70%, #e879f9 100%);
+  --clr-accent-soft: rgba(168, 85, 247, 0.22);
+  --clr-text-primary:   rgba(255, 255, 255, 0.94);
+  --clr-text-secondary: rgba(243, 232, 255, 0.66);
+  --clr-text-muted:     rgba(233, 213, 255, 0.42);
+  --clr-text-dark:      #1e1028;
+  --clr-border:      rgba(216, 180, 254, 0.12);
+  --clr-border-mid:  rgba(216, 180, 254, 0.26);
 
   /* Typography */
-  --font-display: 'Space Mono', monospace;
-  --font-body:    'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Plus Jakarta Sans', system-ui, sans-serif;
 
   /* Spacing scale */
   --sp-1: 0.25rem;
@@ -37,20 +38,21 @@
   --sp-24: 6rem;
 
   /* Border radius */
-  --radius-sm:  4px;
+  --radius-sm:  999px;
   --radius-md:  8px;
-  --radius-lg:  16px;
-  --radius-xl:  24px;
+  --radius-lg:  14px;
   --radius-full: 9999px;
 
   /* Transitions */
-  --transition-fast:   150ms ease;
-  --transition-base:   250ms ease;
-  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms var(--ease-out);
+  --transition-slow: 700ms var(--ease-out);
 
   /* Layout */
-  --max-width: 1100px;
-  --section-gap: 7rem;
+  --max-width: 1240px;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --nav-height: 56px;
 }
 
 /* ============================================
@@ -71,8 +73,8 @@ body {
   background-color: var(--clr-bg);
   color: var(--clr-text-primary);
   font-family: var(--font-body);
-  font-weight: 300;
-  line-height: 1.7;
+  font-weight: 400;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -88,9 +90,10 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  color: inherit;
 }
 
-img, svg {
+img, svg, video {
   display: block;
   max-width: 100%;
 }
@@ -99,9 +102,95 @@ ul, ol {
   list-style: none;
 }
 
+:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--clr-accent);
+  color: var(--clr-white);
+}
+
 /* ============================================
-   TIPOGRAFÍA UTILITARIA
+   BOTONES ESTILO TESLA (compartidos)
    ============================================ */
-.font-display { font-family: var(--font-display); }
-.text-purple   { color: var(--clr-purple-400); }
-.text-muted    { color: var(--clr-text-secondary); }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 220px;
+  height: 44px;
+  padding: 0 1.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: background-color var(--transition-base), color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-light {
+  background: #ffffff;
+  color: var(--clr-text-dark);
+}
+.btn-light:hover { background: var(--clr-bg-light); box-shadow: 0 10px 40px -10px rgba(216, 180, 254, 0.7); }
+
+.btn-dark {
+  background: rgba(26, 17, 38, 0.6);
+  border: 1px solid var(--clr-border-mid);
+  color: var(--clr-white);
+  backdrop-filter: blur(8px);
+}
+.btn-dark:hover { background: rgba(168, 85, 247, 0.22); border-color: var(--clr-lilac); }
+
+.btn-accent {
+  background: var(--clr-accent);
+  color: var(--clr-white);
+}
+.btn-accent:hover { background: #9333ea; }
+
+/* Etiqueta de sección */
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--clr-lilac);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   TIPOGRAFÍA
+   ============================================ */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* Texto con degradado lila → orquídea, en cursiva */
+.text-gradient {
+  font-style: italic;
+  background: var(--gradient-accent);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 8s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}

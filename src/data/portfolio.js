@@ -17,6 +17,9 @@ export const PERSONAL_INFO = {
   github: 'https://github.com/YuranyRivera',
   linkedin: 'https://www.linkedin.com/in/sofia-de-la-cruz-5828ba311',
   avatar: '/sofia.png',
+  /* Video de fondo del hero (opcional). Coloca un .mp4 en /public y pon su ruta aquí,
+     p. ej. '/hero.mp4'. Si queda vacío, el hero usa las capturas de los proyectos. */
+  heroVideo: '',
 }
 
 export const SKILLS = [
@@ -37,13 +40,15 @@ export const SKILLS = [
 /**
  * Proyectos — agrega los tuyos aquí.
  * Campos obligatorios: id, title, description, tags
- * Opcionales: liveUrl, repoUrl, featured
+ * Opcionales: liveUrl, repoUrl, featured, image (captura en /public), category
  */
 export const PROJECTS = [
   {
     id: 1,
     title: 'InveSchool',
     description: 'Sistema de inventario para instituciones educativas. Permite gestionar artículos de almacenamiento y administrativos, registrar movimientos de entrada y salida, dar de baja activos con evidencia fotográfica y generar reportes en PDF y Excel.',
+    category: 'Full-stack · Gestión de inventario',
+    image: '/projects/inveschool.png',
     tags: ['React', 'Node.js', 'PostgreSQL', 'Supabase'],
     liveUrl: 'https://frontend-phi-five-52.vercel.app/articles',
     repoUrl: 'https://github.com/YuranyRivera/InveSchool',
@@ -53,6 +58,8 @@ export const PROJECTS = [
     id: 2,
     title: 'Banco de Proyectos PAC',
     description: 'Plataforma de gestión de proyectos para aprendices del SENA. Permite crear proyectos, evaluarlos por objetivos y alcances, asignar aprendices y calcular promedios finales con diferentes roles de usuario.',
+    category: 'Full-stack · Plataforma educativa',
+    image: '/projects/banco-pac.png',
     tags: ['React', 'Node.js', 'PostgreSQL', 'TailwindCSS', 'JWT'],
     liveUrl: 'https://banco-de-proyectos.netlify.app',
     repoUrl: 'https://github.com/YuranyRivera/Banco-de-Proyectos-PAC',
@@ -63,7 +70,7 @@ export const PROJECTS = [
 export const NAV_LINKS = [
   { label: 'Inicio',      href: '#hero' },
   { label: 'Sobre mí',   href: '#about' },
-  { label: 'Habilidades', href: '#skills' },
   { label: 'Proyectos',  href: '#projects' },
+  { label: 'Habilidades', href: '#skills' },
   { label: 'Contacto',   href: '#contact' },
 ]

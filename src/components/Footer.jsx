@@ -1,5 +1,6 @@
 /**
  * components/Footer.jsx
+ * Pie de página minimalista estilo Tesla.
  */
 import { PERSONAL_INFO } from '@/data/portfolio'
 import styles from './Footer.module.css'
@@ -9,14 +10,13 @@ export default function Footer() {
 
   return (
     <footer className={styles.footer} role="contentinfo">
-      <div className={styles.inner}>
-        <span className={styles.logo} aria-label="Logo Sofia Rivera">
-          <span className={styles.bracket}>&lt;</span>YR<span className={styles.bracket}>/&gt;</span>
-        </span>
-        <p className={styles.copy}>
-          © {year} {PERSONAL_INFO.shortName} · Diseñado y construido con React & ❤️
-        </p>
-      </div>
+      <ul className={styles.links} role="list">
+        <li>{PERSONAL_INFO.shortName} © {year}</li>
+        <li><a href={PERSONAL_INFO.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href={`mailto:${PERSONAL_INFO.email}`}>Email</a></li>
+        <li>{PERSONAL_INFO.location}</li>
+      </ul>
     </footer>
   )
 }

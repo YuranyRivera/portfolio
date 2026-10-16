@@ -1,70 +1,69 @@
 /**
  * components/Contact.jsx
- * Sección de contacto limpia y directa.
+ * Llamado a la acción final a pantalla completa.
  */
 import { motion } from 'framer-motion'
-import { useReveal } from '@/hooks/useReveal'
 import { PERSONAL_INFO } from '@/data/portfolio'
 import styles from './Contact.module.css'
 
-const variants = {
-  hidden:  { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.4, 0, 0.2, 1] } },
+const reveal = {
+  hidden:  { opacity: 0, y: 32 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.12, duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  }),
 }
 
 export default function Contact() {
-  const { ref, isVisible } = useReveal()
-
   return (
     <section id="contact" className={styles.section} aria-labelledby="contact-heading">
-      <div className={styles.container}>
-        <motion.div
-          ref={ref}
-          className={styles.inner}
-          variants={variants}
+      <div className={styles.glow} aria-hidden="true" />
+
+      <div className={styles.inner}>
+        <motion.span className="eyebrow" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          Contacto
+        </motion.span>
+
+        <motion.h2
+          id="contact-heading"
+          className={styles.heading}
+          variants={reveal}
           initial="hidden"
-          animate={isVisible ? 'visible' : 'hidden'}
+          whileInView="visible"
+          viewport={{ once: true }}
+          custom={1}
         >
-          <span className={styles.label} aria-hidden="true">04 · contacto</span>
+          ¿Tienes un proyecto<br /><span className="text-gradient">en mente?</span>
+        </motion.h2>
 
-          <h2 id="contact-heading" className={styles.heading}>
-            ¿Tienes un proyecto en mente?
-          </h2>
+        <motion.p className={styles.body} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={2}>
+          Estoy abierta a nuevas oportunidades, colaboraciones y conversaciones
+          interesantes. Construyamos algo juntos.
+        </motion.p>
 
-          <p className={styles.body}>
-            Estoy abierta a nuevas oportunidades, colaboraciones y conversaciones
-            interesantes. No dudes en escribirme.
-          </p>
-
-          <a
-            href={`mailto:${PERSONAL_INFO.email}`}
-            className={styles.emailBtn}
-            aria-label="Enviar email a Sofia Rivera"
-          >
+        <motion.div className={styles.actions} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={3}>
+          <a href={`mailto:${PERSONAL_INFO.email}`} className="btn btn-light">
             Escribir un email
           </a>
-
-          <div className={styles.links}>
-            <a
-              href={PERSONAL_INFO.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
-              aria-label="Perfil de GitHub"
-            >
-              GitHub ↗
-            </a>
-            <a
-              href={PERSONAL_INFO.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
-              aria-label="Perfil de LinkedIn"
-            >
-              LinkedIn ↗
-            </a>
-          </div>
+          <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-dark">
+            Conectar en LinkedIn
+          </a>
         </motion.div>
+
+        <motion.a
+          href={PERSONAL_INFO.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.github}
+          variants={reveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          custom={4}
+        >
+          Ver mi GitHub ↗
+        </motion.a>
       </div>
     </section>
   )

@@ -1,98 +1,117 @@
 /* Skills.module.css */
 
 .section {
-  overflow: hidden;
-  padding: var(--section-gap) 2rem;
+  position: relative;
+  padding: clamp(6rem, 12vw, 9rem) 0;
   background: var(--clr-bg-surface);
+  overflow: hidden;
 }
 
 .container {
-  position: relative;
-  z-index: 1;
   max-width: var(--max-width);
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-12);
+  padding: 0 var(--gutter);
 }
 
-.label {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--clr-purple-500);
-  margin-bottom: var(--sp-4);
-}
+.header { text-align: center; }
 
 .heading {
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 700;
-  color: var(--clr-text-primary);
-  letter-spacing: -0.02em;
-  margin-bottom: var(--sp-3);
+  margin-top: 0.75rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
 }
 
 .subheading {
-  font-size: 1rem;
+  margin-top: 0.75rem;
   color: var(--clr-text-secondary);
-  font-weight: 300;
 }
 
-/* Grid de cards */
+/* Cintas infinitas */
+.marquees {
+  margin: clamp(3rem, 6vw, 5rem) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee { overflow: hidden; }
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 38s linear infinite;
+}
+.reverse { animation-direction: reverse; }
+.marquees:hover .track { animation-play-state: paused; }
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+  font-size: clamp(1.75rem, 4.5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(216, 180, 254, 0.35);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  transition: color var(--transition-base);
+}
+.marqueeItem:hover { color: var(--clr-lilac); }
+
+.sep {
+  font-size: 0.4em;
+  color: var(--clr-accent-2);
+  -webkit-text-stroke: 0;
+}
+
+/* Ficha por categoría */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--sp-6);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
 }
 
-.card {
-  background: var(--clr-bg-card);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-8);
-  transition: border-color var(--transition-base), transform var(--transition-base);
+.column {
+  border-top: 1px solid var(--clr-border-mid);
+  padding-top: 1.5rem;
 }
 
-.card:hover {
-  border-color: var(--clr-border-mid);
-  transform: translateY(-4px);
+.index {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--clr-accent);
+  font-variant-numeric: tabular-nums;
 }
 
 .category {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--clr-purple-500);
-  margin-bottom: var(--sp-6);
+  margin: 0.5rem 0 1.25rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
-.itemList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-}
-
-.pill {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  font-size: 0.92rem;
-  font-weight: 300;
+.item {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--clr-border);
   color: var(--clr-text-secondary);
-  transition: color var(--transition-fast);
+  font-size: 0.95rem;
+  transition: color var(--transition-fast), padding-left var(--transition-base);
 }
+.item:hover { color: var(--clr-white); padding-left: 0.5rem; }
 
-.pill:hover { color: var(--clr-text-primary); }
-
-.pillDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--clr-purple-600);
-  flex-shrink: 0;
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
 }

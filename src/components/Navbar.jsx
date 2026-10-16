@@ -1,6 +1,7 @@
 /**
  * components/Navbar.jsx
- * Barra de navegación fija con detección de sección activa.
+ * Barra fija estilo Tesla: transparente sobre el hero, con desenfoque al hacer scroll
+ * y un panel lateral (drawer) para el menú.
  */
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -17,39 +18,47 @@ export default function Navbar() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
         })
       },
-      { rootMargin: '-40% 0px -55% 0px' }
+      { rootMargin: '-45% 0px -50% 0px' }
     )
 
-    const sections = document.querySelectorAll('section[id]')
-    sections.forEach((s) => observer.observe(s))
-    return () => observer.disconnect()
+    /* Las secciones se cargan de forma diferida: observa también las que aparezcan después */
+    const observeAll = () => document.querySelectorAll('section[id]').forEach((s) => observer.observe(s))
+    observeAll()
+    const mutation = new MutationObserver(observeAll)
+    mutation.observe(document.getElementById('main-content') ?? document.body, { childList: true, subtree: true })
+
+    return () => {
+      observer.disconnect()
+      mutation.disconnect()
+    }
   }, [])
 
-  /* Detecta si se hizo scroll para cambiar estilo del nav */
+  /* Cambia el estilo del nav al hacer scroll */
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 20)
+    const onScroll = () => setIsScrolled(window.scrollY > 40)
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  /* Cierra el menú móvil al cambiar tamaño de pantalla */
+  /* Bloquea el scroll del body y permite cerrar con Escape mientras el drawer está abierto */
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth > 768) setMenuOpen(false)
+    if (!menuOpen) return
+    const onKey = (e) => e.key === 'Escape' && setMenuOpen(false)
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
     }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
+  }, [menuOpen])
 
   const handleNavClick = useCallback((href) => {
     setMenuOpen(false)
-    const target = document.querySelector(href)
-    target?.scrollIntoView({ behavior: 'smooth' })
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
   return (
@@ -61,73 +70,103 @@ export default function Navbar() {
           onClick={(e) => { e.preventDefault(); handleNavClick('#hero') }}
           aria-label="Ir al inicio"
         >
-          <span className={styles.logoBracket}>&lt;</span>
-          YR
-          <span className={styles.logoBracket}>/&gt;</span>
+          {PERSONAL_INFO.shortName.split(' ')[0]}
+          <span className={styles.logoAccent}>.</span>
         </a>
 
         {/* Desktop links */}
         <ul className={styles.links} role="list">
-          {NAV_LINKS.map(({ label, href }) => (
-            <li key={href}>
-              <button
-                className={`${styles.link} ${activeSection === href.slice(1) ? styles.active : ''}`}
-                onClick={() => handleNavClick(href)}
-                aria-current={activeSection === href.slice(1) ? 'page' : undefined}
-              >
-                {label}
-              </button>
-            </li>
-          ))}
+          {NAV_LINKS.map(({ label, href }) => {
+            const isActive = activeSection === href.slice(1)
+            return (
+              <li key={href}>
+                <button
+                  className={`${styles.link} ${isActive ? styles.active : ''}`}
+                  onClick={() => handleNavClick(href)}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className={styles.pill}
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <span className={styles.linkLabel}>{label}</span>
+                </button>
+              </li>
+            )
+          })}
         </ul>
 
-        {/* CTA */}
-        <a
-          href={`mailto:${PERSONAL_INFO.email}`}
-          className={styles.cta}
-          aria-label="Contactar a Yurany por email"
-        >
-          Hablemos
-        </a>
-
-        {/* Burger mobile */}
-        <button
-          className={styles.burger}
-          onClick={() => setMenuOpen((v) => !v)}
-          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-          aria-expanded={menuOpen}
-        >
-          <span className={`${styles.burgerLine} ${menuOpen ? styles.open : ''}`} />
-          <span className={`${styles.burgerLine} ${menuOpen ? styles.open : ''}`} />
-          <span className={`${styles.burgerLine} ${menuOpen ? styles.open : ''}`} />
-        </button>
+        <div className={styles.right}>
+          <a href={`mailto:${PERSONAL_INFO.email}`} className={styles.cta}>
+            Hablemos
+          </a>
+          <button
+            className={styles.menuBtn}
+            onClick={() => setMenuOpen(true)}
+            aria-label="Abrir menú"
+            aria-expanded={menuOpen}
+          >
+            Menú
+          </button>
+        </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Drawer lateral */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            className={styles.mobileMenu}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            role="dialog"
-            aria-label="Menú móvil"
-          >
-            <ul role="list">
-              {NAV_LINKS.map(({ label, href }) => (
-                <li key={href}>
-                  <button
-                    className={`${styles.mobileLink} ${activeSection === href.slice(1) ? styles.active : ''}`}
-                    onClick={() => handleNavClick(href)}
+          <>
+            <motion.div
+              className={styles.backdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.aside
+              className={styles.drawer}
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menú"
+            >
+              <button className={styles.close} onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+
+              <ul role="list" className={styles.drawerList}>
+                {NAV_LINKS.map(({ label, href }, i) => (
+                  <motion.li
+                    key={href}
+                    initial={{ opacity: 0, x: 24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.12 + i * 0.05, duration: 0.4 }}
                   >
-                    {label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+                    <button
+                      className={`${styles.drawerLink} ${activeSection === href.slice(1) ? styles.drawerActive : ''}`}
+                      onClick={() => handleNavClick(href)}
+                    >
+                      {label}
+                    </button>
+                  </motion.li>
+                ))}
+              </ul>
+
+              <div className={styles.drawerFooter}>
+                <a href={PERSONAL_INFO.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+                <a href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</a>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </header>

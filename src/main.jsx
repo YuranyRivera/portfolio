@@ -14,11 +14,11 @@ skipLinkStyle.textContent = `
     position: absolute;
     top: -100%;
     left: 1rem;
-    background: #7c3aed;
+    background: #a855f7;
     color: #fff;
     padding: 0.5rem 1rem;
     border-radius: 0 0 8px 8px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 0.85rem;
     z-index: 9999;
     transition: top 0.2s;
@@ -26,7 +26,7 @@ skipLinkStyle.textContent = `
   }
   .skip-link:focus {
     top: 0;
-    outline: 2px solid #c4b5fd;
+    outline: 2px solid #f0abfc;
     outline-offset: 2px;
   }
 `
