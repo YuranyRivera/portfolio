@@ -7,7 +7,7 @@
   display: grid;
   place-items: center;
   padding: 6rem var(--gutter);
-  background: var(--clr-bg);
+  background: transparent;
   overflow: hidden;
   text-align: center;
 }

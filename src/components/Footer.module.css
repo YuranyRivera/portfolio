@@ -2,7 +2,7 @@
 
 .footer {
   padding: 1.75rem var(--gutter) 2rem;
-  background: var(--clr-bg);
+  background: transparent;
   border-top: 1px solid var(--clr-border);
 }
 

@@ -1,17 +1,14 @@
 /**
  * components/Hero.jsx
  * Hero a pantalla completa estilo Tesla.
- * Fondo: video (si PERSONAL_INFO.heroVideo existe) o un slideshow cinematográfico
- * con las capturas de los proyectos (efecto Ken Burns + crossfade).
+ * Fondo: video (si PERSONAL_INFO.heroVideo existe) u orbes de luz morada animados.
  * El contenido hace parallax y se desvanece al hacer scroll.
  */
-import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import { PERSONAL_INFO, PROJECTS } from '@/data/portfolio'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { PERSONAL_INFO } from '@/data/portfolio'
 import styles from './Hero.module.css'
 
-const SLIDE_MS = 6000
-const SLIDES = PROJECTS.filter((p) => p.image).map((p) => p.image)
 const [firstName, ...rest] = PERSONAL_INFO.shortName.split(' ')
 const lastName = rest.join(' ')
 
@@ -25,19 +22,10 @@ const fadeUp = {
 }
 
 function HeroBackground() {
-  const reduceMotion = useReducedMotion()
-  const [index, setIndex] = useState(0)
-
-  useEffect(() => {
-    if (PERSONAL_INFO.heroVideo || SLIDES.length < 2 || reduceMotion) return
-    const id = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), SLIDE_MS)
-    return () => clearInterval(id)
-  }, [reduceMotion])
-
   if (PERSONAL_INFO.heroVideo) {
     return (
       <video
-        className={styles.media}
+        className={styles.video}
         src={PERSONAL_INFO.heroVideo}
         autoPlay
         muted
@@ -48,25 +36,14 @@ function HeroBackground() {
     )
   }
 
+  /* Orbes de luz morada que flotan lentamente */
   return (
-    <AnimatePresence initial={false}>
-      {SLIDES.length > 0 && (
-        <motion.img
-          key={SLIDES[index]}
-          src={SLIDES[index]}
-          alt=""
-          aria-hidden="true"
-          className={styles.media}
-          initial={{ opacity: 0, scale: 1.18 }}
-          animate={{ opacity: 1, scale: 1.04 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            opacity: { duration: 1.6, ease: 'easeInOut' },
-            scale: { duration: (SLIDE_MS + 1600) / 1000, ease: 'linear' },
-          }}
-        />
-      )}
-    </AnimatePresence>
+    <>
+      <div className={`${styles.orb} ${styles.orb1}`} />
+      <div className={`${styles.orb} ${styles.orb2}`} />
+      <div className={`${styles.orb} ${styles.orb3}`} />
+      <div className={styles.grid} />
+    </>
   )
 }
 
@@ -83,7 +60,6 @@ export default function Hero() {
     <section id="hero" ref={ref} className={styles.hero} aria-label="Presentación">
       <motion.div className={styles.background} style={{ scale: bgScale }} aria-hidden="true">
         <HeroBackground />
-        <div className={styles.aurora} />
         <div className={styles.overlay} />
         <div className={styles.grain} />
       </motion.div>

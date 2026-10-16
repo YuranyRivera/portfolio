@@ -3,7 +3,7 @@
 .section {
   position: relative;
   padding: clamp(6rem, 12vw, 9rem) 0;
-  background: var(--clr-bg-surface);
+  background: rgba(18, 11, 28, 0.55);
   overflow: hidden;
 }
 
@@ -33,7 +33,8 @@
   margin: clamp(3rem, 6vw, 5rem) 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
+  padding: 0.5rem 0;
   mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
 }
@@ -43,7 +44,7 @@
 .track {
   display: flex;
   width: max-content;
-  animation: scroll 38s linear infinite;
+  animation: scroll 32s linear infinite;
 }
 .reverse { animation-direction: reverse; }
 .marquees:hover .track { animation-play-state: paused; }
@@ -53,28 +54,42 @@
   to   { transform: translateX(-50%); }
 }
 
-.marqueeItem {
-  display: inline-flex;
+/* Tarjeta de herramienta */
+.tool {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding-right: 2rem;
-  font-size: clamp(1.75rem, 4.5vw, 3.5rem);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  white-space: nowrap;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(216, 180, 254, 0.35);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  transition: color var(--transition-base);
+  justify-content: center;
+  gap: 0.7rem;
+  width: 132px;
+  height: 132px;
+  margin-right: 1rem;
+  border-radius: 24px;
+  background: rgba(26, 17, 38, 0.65);
+  border: 1px solid var(--clr-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 }
-.marqueeItem:hover { color: var(--clr-lilac); }
 
-.sep {
-  font-size: 0.4em;
-  color: var(--clr-accent-2);
-  -webkit-text-stroke: 0;
+.tool:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--brand) 60%, transparent);
+  box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--brand) 70%, transparent);
+}
+
+.toolIcon {
+  font-size: 2.6rem;
+  line-height: 0;
+  color: var(--brand);
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--brand) 45%, transparent));
+}
+
+.toolName {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
 }
 
 /* Ficha por categoría */

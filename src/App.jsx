@@ -8,6 +8,7 @@ import { motion, useScroll, useSpring } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import Hero   from '@/components/Hero'
 import Footer from '@/components/Footer'
+import ParticleBackground from '@/components/ParticleBackground'
 // Carga diferida de secciones que no son visibles al inicio
 const About    = lazy(() => import('@/components/About'))
 const Skills   = lazy(() => import('@/components/Skills'))
@@ -48,9 +49,10 @@ export default function App() {
         Saltar al contenido principal
       </a>
 
+      <ParticleBackground />
       <ScrollProgress />
       <Navbar />
-      <main id="main-content">
+      <main id="main-content" style={{ position: 'relative', zIndex: 1 }}>
         <Hero />
 
         <Suspense fallback={<SectionFallback />}>
@@ -70,7 +72,9 @@ export default function App() {
         </Suspense>
       </main>
 
-      <Footer />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <Footer />
+      </div>
     </>
   )
 }

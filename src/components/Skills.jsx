@@ -1,12 +1,19 @@
 /**
  * components/Skills.jsx
- * Habilidades: cinta infinita de tecnologías + ficha por categoría.
+ * Habilidades: carrusel infinito de herramientas con sus logos + ficha por categoría.
  */
 import { motion } from 'framer-motion'
-import { SKILLS } from '@/data/portfolio'
+import {
+  SiReact, SiNextdotjs, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiTailwindcss,
+  SiNodedotjs, SiPostgresql, SiMysql, SiSupabase, SiGit, SiGithub, SiFigma, SiVite,
+} from 'react-icons/si'
+import { SKILLS, TOOLS } from '@/data/portfolio'
 import styles from './Skills.module.css'
 
-const ALL_ITEMS = SKILLS.flatMap((s) => s.items)
+const ICONS = {
+  SiReact, SiNextdotjs, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiTailwindcss,
+  SiNodedotjs, SiPostgresql, SiMysql, SiSupabase, SiGit, SiGithub, SiFigma, SiVite,
+}
 
 const reveal = {
   hidden:  { opacity: 0, y: 32 },
@@ -17,17 +24,23 @@ const reveal = {
   }),
 }
 
+function ToolCard({ name, icon, color }) {
+  const Icon = ICONS[icon]
+  return (
+    <div className={styles.tool} style={{ '--brand': color }}>
+      <span className={styles.toolIcon}>{Icon && <Icon aria-hidden="true" />}</span>
+      <span className={styles.toolName}>{name}</span>
+    </div>
+  )
+}
+
 function Marquee({ items, reverse = false }) {
   /* Se duplica la lista para que el bucle sea continuo */
-  const loop = [...items, ...items]
   return (
-    <div className={styles.marquee} aria-hidden="true">
+    <div className={styles.marquee}>
       <div className={`${styles.track} ${reverse ? styles.reverse : ''}`}>
-        {loop.map((item, i) => (
-          <span key={`${item}-${i}`} className={styles.marqueeItem}>
-            {item}
-            <span className={styles.sep}>✦</span>
-          </span>
+        {[...items, ...items].map((tool, i) => (
+          <ToolCard key={`${tool.name}-${i}`} {...tool} />
         ))}
       </div>
     </div>
@@ -35,7 +48,7 @@ function Marquee({ items, reverse = false }) {
 }
 
 export default function Skills() {
-  const half = Math.ceil(ALL_ITEMS.length / 2)
+  const half = Math.ceil(TOOLS.length / 2)
 
   return (
     <section id="skills" className={styles.section} aria-labelledby="skills-heading">
@@ -53,9 +66,13 @@ export default function Skills() {
         </motion.div>
       </div>
 
-      <div className={styles.marquees}>
-        <Marquee items={ALL_ITEMS.slice(0, half)} />
-        <Marquee items={ALL_ITEMS.slice(half)} reverse />
+      {/* Lista accesible; las cintas son decorativas */}
+      <ul className="sr-only">
+        {TOOLS.map((t) => <li key={t.name}>{t.name}</li>)}
+      </ul>
+      <div className={styles.marquees} aria-hidden="true">
+        <Marquee items={TOOLS.slice(0, half)} />
+        <Marquee items={TOOLS.slice(half)} reverse />
       </div>
 
       <div className={styles.container}>
